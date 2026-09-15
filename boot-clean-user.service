@@ -1,0 +1,15 @@
+[Unit]
+Description=Boot cleanup: user cache and uv cache for techyiola
+After=local-fs.target
+Before=systemd-user-sessions.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=techyiola
+Group=techyiola
+ExecStart=/usr/bin/bash -c 'rm -rf /home/techyiola/.cache/* /home/techyiola/.cache/.[!.]* /home/techyiola/.cache/..?*'
+ExecStart=-/usr/bin/uv clean cache --force
+
+[Install]
+WantedBy=multi-user.target

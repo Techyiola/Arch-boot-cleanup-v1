@@ -1,0 +1,13 @@
+[Unit]
+Description=Boot cleanup: pacman package cache and orphaned packages
+After=local-fs.target
+Before=systemd-user-sessions.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/paccache -rk0
+ExecStart=/usr/bin/bash -c 'pkgs=$(/usr/bin/pacman -Qdtq); if [ -n "$pkgs" ]; then /usr/bin/pacman -Rns --noconfirm --noprogressbar $pkgs; fi'
+
+[Install]
+WantedBy=multi-user.target
